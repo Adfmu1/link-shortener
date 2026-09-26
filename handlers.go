@@ -12,23 +12,25 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func postHandler(w http.ResponseWriter, r *http.Request) {
-	type req struct {
-		URL string `json:"url"`
-	}
 	decoder := json.NewDecoder(r.Body)
-	params := req{}
+	params := reqLink{}
 	err := decoder.Decode(&params)
 	if err != nil {
 		slog.Error("Error while decoding data", "ERROR", err)
+		respondWithError(w, http.StatusBadRequest, "Bad request")
+		return
 	}
 
-	resp := struct {
-		URL string `json:"shortUrl"`
-	}{
+	resp := shortenedLink{
 		URL: "https://shorturl.at/iZkiR",
 	}
-	data, _ := json.Marshal(resp)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(200)
-	w.Write([]byte(data))
+
+	data, err := json.Marshal(resp)
+	if err != nil {
+		slog.Error("Error while decoding data", "ERROR", err)
+		respondWithError(w, http.StatusInternalServerError, "Bad request")
+		return
+	}
+
+	respondWithJSON(w, http.StatusCreated, data)
 }
