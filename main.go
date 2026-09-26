@@ -19,7 +19,10 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /", rootHandler)
+	mux.HandleFunc("GET /api/", rootHandler)
+	mux.HandleFunc("POST /api/shorten", postHandler)
+
+	mux.Handle("GET /", http.FileServer(http.Dir("./frontend")))
 
 	srv := &http.Server{
 		Addr:              ":" + port,

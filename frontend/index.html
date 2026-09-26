@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Link Shortener</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <main class="card">
+    <h1>Link Shortener</h1>
+
+    <form id="shorten-form" autocomplete="off">
+      <input
+        type="text"
+        id="url-input"
+        name="url"
+        placeholder="Paste your link here"
+        required
+      />
+      <button type="submit" id="shorten-btn">Shorten</button>
+    </form>
+
+    <p id="error-message" class="error-message" hidden></p>
+
+    <div id="result-box" class="result-box" hidden>
+      <p>Shortened link:</p>
+      <a id="short-link" href="#" target="_blank" rel="noopener noreferrer"></a>
+      <button id="reset-btn" type="button">Shorten another link</button>
+    </div>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
