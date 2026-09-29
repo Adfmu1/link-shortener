@@ -41,7 +41,11 @@ func main() {
 
 	mux := http.NewServeMux()
 
+	// GET handlers
 	mux.HandleFunc("GET /api/", rootHandler)
+	mux.HandleFunc("GET /{code}", app.redirectHandler)
+
+	// POST handlers
 	mux.HandleFunc("POST /api/shorten", app.postCode)
 
 	mux.Handle("GET /", http.FileServer(http.Dir("./frontend")))

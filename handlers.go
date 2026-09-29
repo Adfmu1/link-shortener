@@ -53,3 +53,25 @@ func (app application) postCode(w http.ResponseWriter, r *http.Request) {
 	app.loggr.Info("Response logged")
 	respondWithJSON(w, r, http.StatusCreated, dbResp)
 }
+
+func (app application) redirectHandler(w http.ResponseWriter, r *http.Request) {
+	code := r.PathValue("code")
+
+	data, err := app.DB.GetDataFromCode(r.Context(), code)
+	if err != nil {
+		respondWithError(w, r, http.StatusNotFound, "code doesnt exist")
+		return
+	}
+	app.loggr.InfoContext(r.Context(), "accesed short url",
+		slog.String("Code", code),
+		slog.String("Url", data.Url))
+
+	err = app.DB.IncrementClicksFromCode(r.Context(), code)
+	if err != nil {
+		respondWithError(w, r, http.StatusNotFound, "code doesnt exist")
+		app.loggr.Error("error with incrementing the click count for given code",
+			slog.String("code", code))
+		return
+	}
+	http.Redirect(w, r, data.Url, http.StatusFound)
+}
