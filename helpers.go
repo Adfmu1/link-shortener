@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
 type errorResponse struct {
 	Error string `json:"error"`
 }
@@ -28,8 +30,5 @@ func respondWithJSON(rw http.ResponseWriter, code int, payload interface{}) {
 }
 
 func respondWithError(rw http.ResponseWriter, code int, msg string) {
-	if code >= http.StatusInternalServerError {
-		slog.Error("Error has occured:", "Status code", code, "Error", msg)
-	}
 	respondWithJSON(rw, code, errorResponse{Error: msg})
 }

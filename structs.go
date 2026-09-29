@@ -5,5 +5,5 @@ type reqLink struct {
 }
 
 type shortenedLink struct {
-	URL string `json:"shortUrl"`
+	URL string `json:"Code"`
 }

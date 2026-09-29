@@ -51,12 +51,12 @@
 
       const data = await response.json();
 
-      if (!data.shortUrl) {
+      if (!data.Code) {
         throw new Error('Response did not include a shortUrl.');
       }
 
-      shortLinkEl.textContent = data.shortUrl;
-      shortLinkEl.href = data.shortUrl;
+      shortLinkEl.textContent = data.Code;
+      shortLinkEl.href = data.Code;
 
       form.hidden = true;
       resultBox.hidden = false;
