@@ -20,18 +20,23 @@ func (app application) postCode(w http.ResponseWriter, r *http.Request) {
 	params := reqLink{}
 	err := decoder.Decode(&params)
 	if err != nil {
-		app.loggr.Error("Error while decoding data", slog.String("ERROR", err.Error()))
+		app.loggr.Error("error while decoding data",
+			slog.String("error", err.Error()))
 		respondWithError(w, r, http.StatusBadRequest, "Bad request")
 		return
 	}
 
 	shortCode, err := app.DB.CheckIfCodeExistsFromUrl(r.Context(), params.URL)
 	if err != nil && err != sql.ErrNoRows {
-		app.loggr.Error("Error while querying DB", slog.String("ERROR", err.Error()), slog.Int("Status code", http.StatusInternalServerError))
+		app.loggr.Error("error while querying DB",
+			slog.String("error", err.Error()),
+			slog.Int("status code", http.StatusInternalServerError))
 		respondWithError(w, r, http.StatusInternalServerError, "Server error")
 		return
 	} else if shortCode != "" {
-		app.loggr.Info("Shortcode exists for this URL", slog.Int("Status code", http.StatusOK), slog.String("Code", shortCode))
+		app.loggr.Info("shortcode exists for this URL",
+			slog.Int("status code", http.StatusOK),
+			slog.String("code", shortCode))
 		respondWithJSON(w, r, http.StatusOK, shortenedLink{
 			URL: shortCode,
 		})
@@ -50,7 +55,7 @@ func (app application) postCode(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	app.loggr.Info("Response logged")
+	app.loggr.Info("response logged")
 	respondWithJSON(w, r, http.StatusCreated, dbResp)
 }
 

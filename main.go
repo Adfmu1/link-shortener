@@ -22,7 +22,7 @@ var app application
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		slog.Error("An error has occured when loading .env", "error", err.Error)
+		slog.Error("an error has occured when loading .env", "error", err.Error)
 	}
 
 	port := os.Getenv("PORT")
@@ -30,7 +30,7 @@ func main() {
 
 	connection, err := sql.Open("postgres", dbUrl)
 	if err != nil {
-		slog.Error("Error while connecting to DB", "Error", err.Error())
+		slog.Error("error while connecting to DB", "Error", err.Error())
 		return
 	}
 	defer connection.Close()
@@ -56,9 +56,9 @@ func main() {
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
-	app.loggr.Info("Started server", "Port", port)
+	app.loggr.Info("started server", "Port", port)
 	err = srv.ListenAndServe()
 	if err != nil {
-		app.loggr.Error("An error has occured when loading .env", "error", err.Error)
+		app.loggr.Error("an error has occured when loading .env", "error", err.Error)
 	}
 }
