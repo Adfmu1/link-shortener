@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log/slog"
 	"net/http"
 
@@ -11,8 +10,12 @@ import (
 	"go.rtnl.ai/x/randstr"
 )
 
-func rootHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello from root!")
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	respondWithJSON(w, r, http.StatusOK, struct {
+		Response string `json:"response"`
+	}{
+		Response: "healthy",
+	})
 }
 
 func (app application) postCode(w http.ResponseWriter, r *http.Request) {

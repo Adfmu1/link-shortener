@@ -42,14 +42,14 @@ func main() {
 	mux := http.NewServeMux()
 
 	// GET handlers
-	mux.HandleFunc("GET /api/", rootHandler)
+	mux.HandleFunc("GET /api/health/", healthHandler)
 	mux.HandleFunc("GET /{code}", app.redirectHandler)
 
 	// POST handlers
 	mux.HandleFunc("POST /api/shorten", app.postCode)
 
 	// fileserver with frontend
-	mux.Handle("GET /main/", http.StripPrefix("/main/", http.FileServer(http.Dir("./frontend"))))
+	mux.Handle("GET /main", http.StripPrefix("/main/", http.FileServer(http.Dir("./frontend"))))
 
 	srv := &http.Server{
 		Addr:              ":" + port,
