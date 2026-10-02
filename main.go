@@ -44,6 +44,7 @@ func main() {
 	// GET handlers
 	mux.HandleFunc("GET /api/health/", healthHandler)
 	mux.HandleFunc("GET /{code}", app.redirectHandler)
+	mux.HandleFunc("GET /stats/{code}", app.codeStats)
 
 	// POST handlers
 	mux.HandleFunc("POST /api/shorten", app.postCode)

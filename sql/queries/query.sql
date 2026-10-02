@@ -11,7 +11,7 @@ SELECT code FROM links
 WHERE url = $1;
 
 -- name: GetDataFromCode :one
-SELECT url, created_at FROM links
+SELECT url, created_at, click_count FROM links
 WHERE code = $1;
 
 -- name: IncrementClicksFromCode :exec

@@ -23,19 +23,20 @@ func (q *Queries) CheckIfCodeExistsFromUrl(ctx context.Context, url string) (str
 }
 
 const getDataFromCode = `-- name: GetDataFromCode :one
-SELECT url, created_at FROM links
+SELECT url, created_at, click_count FROM links
 WHERE code = $1
 `
 
 type GetDataFromCodeRow struct {
-	Url       string
-	CreatedAt time.Time
+	Url        string
+	CreatedAt  time.Time
+	ClickCount int64
 }
 
 func (q *Queries) GetDataFromCode(ctx context.Context, code string) (GetDataFromCodeRow, error) {
 	row := q.db.QueryRowContext(ctx, getDataFromCode, code)
 	var i GetDataFromCodeRow
-	err := row.Scan(&i.Url, &i.CreatedAt)
+	err := row.Scan(&i.Url, &i.CreatedAt, &i.ClickCount)
 	return i, err
 }
 

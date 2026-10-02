@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"net/http"
 
@@ -18,6 +19,29 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (app application) codeStats(w http.ResponseWriter, r *http.Request) {
+	code := r.PathValue("code")
+
+	data, err := app.DB.GetDataFromCode(r.Context(), code)
+	if errors.Is(err, sql.ErrNoRows) {
+		app.loggr.Error("code doesnt exist in DB",
+			slog.String("code", code))
+		respondWithError(w, r, http.StatusNotFound, "code doesnt exist")
+		return
+	}
+	if err != nil {
+		app.loggr.Error("an error has occured when accessing the code data",
+			slog.String("code", code))
+		respondWithError(w, r, http.StatusNotFound, "code doesnt exist")
+		return
+	}
+
+	app.loggr.InfoContext(r.Context(), "accesed short url data",
+		slog.String("Code", code))
+
+	respondWithJSON(w, r, http.StatusOK, data)
+}
+
 func (app application) postCode(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	params := reqLink{}
@@ -25,7 +49,7 @@ func (app application) postCode(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.loggr.Error("error while decoding data",
 			slog.String("error", err.Error()))
-		respondWithError(w, r, http.StatusBadRequest, "Bad request")
+		respondWithError(w, r, http.StatusBadRequest, "bad request")
 		return
 	}
 
