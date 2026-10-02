@@ -38,7 +38,6 @@ func respondWithError(rw http.ResponseWriter, r *http.Request, code int, msg str
 }
 
 func isUrlValid(uri string) bool {
-	slog.Info("checking validity")
 	if !isUrlReal(uri) {
 		return isUrlReal(uri)
 	}
@@ -76,8 +75,6 @@ func isUrlReal(uri string) bool {
 			slog.Int("status code", resp.StatusCode))
 		return false
 	}
-
-	slog.Info("url is real", slog.Int("status code", resp.StatusCode))
 
 	return true
 }

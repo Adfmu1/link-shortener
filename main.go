@@ -49,7 +49,7 @@ func main() {
 	mux.HandleFunc("POST /api/shorten", app.postCode)
 
 	// fileserver with frontend
-	mux.Handle("GET /main", http.StripPrefix("/main/", http.FileServer(http.Dir("./frontend"))))
+	mux.Handle("GET /main/", http.StripPrefix("/main/", http.FileServer(http.Dir("./frontend"))))
 
 	srv := &http.Server{
 		Addr:              ":" + port,
