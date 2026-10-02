@@ -56,7 +56,7 @@
       }
 
       shortLinkEl.textContent = data.Code;
-      shortLinkEl.href = data.Code;
+      shortLinkEl.href = document.URL.replace("/main", "") + data.Code;
 
       form.hidden = true;
       resultBox.hidden = false;

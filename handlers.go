@@ -26,6 +26,12 @@ func (app application) postCode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	slog.Info("post code validity")
+	if !isUrlValid(params.URL) {
+		respondWithError(w, r, http.StatusBadRequest, "URI not valid")
+		return
+	}
+
 	shortCode, err := app.DB.CheckIfCodeExistsFromUrl(r.Context(), params.URL)
 	if err != nil && err != sql.ErrNoRows {
 		app.loggr.Error("error while querying DB",

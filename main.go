@@ -30,7 +30,7 @@ func main() {
 
 	connection, err := sql.Open("postgres", dbUrl)
 	if err != nil {
-		slog.Error("error while connecting to DB", "Error", err.Error())
+		slog.Error("error while connecting to DB", "error", err.Error())
 		return
 	}
 	defer connection.Close()
@@ -48,7 +48,8 @@ func main() {
 	// POST handlers
 	mux.HandleFunc("POST /api/shorten", app.postCode)
 
-	mux.Handle("GET /", http.FileServer(http.Dir("./frontend")))
+	// fileserver with frontend
+	mux.Handle("GET /main/", http.StripPrefix("/main/", http.FileServer(http.Dir("./frontend"))))
 
 	srv := &http.Server{
 		Addr:              ":" + port,
@@ -56,7 +57,7 @@ func main() {
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
-	app.loggr.Info("started server", "Port", port)
+	app.loggr.Info("started server", "port", port)
 	err = srv.ListenAndServe()
 	if err != nil {
 		app.loggr.Error("an error has occured when loading .env", "error", err.Error)
