@@ -15,7 +15,6 @@ EXPOSE 6090
 WORKDIR /project
 
 COPY --from=build_image /src/app .
-COPY --from=build_image /src/.env .
 COPY --from=build_image /src/frontend ./frontend
 
 ENTRYPOINT [ "./app" ]
